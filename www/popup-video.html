@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>video chat</title>
+  <script src="lib/socketio/socket.io.js"></script>
+  <style>
+
+a:link { color: #FFFFFF; }
+a:visited {color: #FFFFFF; }
+html, body {
+  background-color: #000000;
+  height: 100%;
+  font-family: 'Open Sans', Arial, sans-serif;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 28px;
+  background-color: #3F3F3F;
+  color: #FFFFFF;
+  font-size: 13px; font-weight: bold;
+  line-height: 28px;
+  text-align: center;
+  display: none;
+}
+#container {
+  background-color: #000000;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  margin: 0px auto;
+  -webkit-perspective: 1000;
+}
+#card {
+  -webkit-transition-duration: 0.8s;
+}
+#local {
+  position: absolute;
+  width: 100%;
+  transform: scale(-1, 1);
+  -webkit-transform: scale(-1, 1);
+  -webkit-backface-visibility: hidden;
+}
+#remote {
+  /*position: absolute;*/
+  width: 100%;
+}
+#mini {
+  position: absolute;
+  height: 30%;
+  width: 30%;
+  bottom: 5px;
+  right: 4px;
+  z-index: 9999999;
+  opacity: 1.0;
+}
+#remoteVideo {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  background: black;
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 1s;
+}
+#localVideo {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 1s;
+}
+
+.volumeBar {
+  position: absolute;
+  width: 5px;
+  height: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: #12acef;
+}
+.connectionstate {
+  position: absolute;
+  top: 1px;
+  width: 100%;
+  text-align: right;
+  color: #fff
+}
+
+.close {
+  z-index: 1;
+  color:white;
+  position: absolute;
+  right:20px;
+  top:20px;
+  font-size: 20px;
+}
+
+  </style>
+</head>
+<body>
+    <div class="close" onclick="closeWindow()">
+      Close
+    </div>
+    <div id="mini">
+      <video id='localVideo' autoplay muted></video>
+      <div id="localVolume" class="volumeBar"></div>
+    </div>
+
+    <div id="container">
+      <div id="remote">
+        <video id='remoteVideo' autoplay></video>
+      </div>
+    </div>
+
+
+  <script src="lib/xpush/xpush.js"></script>
+  <script src="lib/xpush/webrtc-adapter.js"></script>
+  <script src="lib/xpush/webrtc.js"></script>
+
+  <script type="text/javascript">
+
+    var localVideo  = document.querySelector('#localVideo');
+    var remoteVideo = document.querySelector('#remoteVideo');
+
+    var url = location.href;
+    var params = url.slice(url.indexOf('?') + 1, url.length);
+
+    var obj = JSON.parse(decodeURIComponent(params));
+
+    var webrtc = new XWebRTC(
+      obj.S, obj.A, obj.C, obj.U,
+      localVideo, remoteVideo);
+
+    var closeWindow = function(){
+      window.close();
+    };
+
+  </script>
+
+</body>
+</html>

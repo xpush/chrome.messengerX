@@ -1,0 +1,189 @@
+<ion-view title="{{channelName}}">
+  <ion-nav-buttons side="left">
+    <div>
+      <i class="icon icon-large ion-ios7-eye icon-nav-bar" id="status_on" style="display:none;"></i>
+      <i class="icon icon-large ion-android-timer icon-nav-bar" id="status_off" ></i>
+    </div>
+  </ion-nav-buttons>
+
+  <ion-nav-buttons side="right">
+    <div class="no-drag" >
+      <button class="button icon ion-navicon" ng-click="toggleMenu(true);" ></button>
+      <button class="button button-dark no-drag" ng-if=" nodeWebkit " ng-click="close()">
+        <img ng-src="{{rootImgPath}}/button_close.png">
+      </button>
+    </div>
+  </ion-nav-buttons>
+  <ion-content padding="true" class="has-header" start-y="120" has-bouncing="true">
+    <ol class="messages">
+      <li ng-repeat="message in messages" ng-class="message.type">
+        <div ng-if="message.type=='R'">
+          <div class="small">{{message.name}}</div>
+          <div class="from">
+            <img ng-src="{{message.image}}" class="profile" />
+            <span class="mw70">{{message.message}}</span>
+            <img ng-src="{{rootImgPath}}/star_{{message.bookmarkFlag}}.png" class="star"  ng-click="setBookmark( message, $index );"/>
+          </div>
+        </div>
+        <div ng-if="message.type=='RI'">
+          <div class="small">{{message.name}}</div>
+          <div class="from">
+            <img ng-src="{{message.image}}" class="profile" />
+            <span class="mw90">
+              <img ng-src="{{message.message}}" popup-link="{{message.active}}" class="from" type="{{message.type}}"/>
+            </span>
+          </div>
+        </div>
+        <div ng-if="message.type=='SI'">
+          <span>
+            <img ng-src="{{message.message}}" popup-link="{{message.active}}" type="{{message.type}}"/>
+          </span>
+        </div>
+        <div ng-if="message.type=='RE'">
+          <div class="small">{{message.name}}</div>
+          <div class="from">
+            <img ng-src="{{message.image}}" class="profile" />
+            <span>
+              <img ng-src="{{message.message}}" class="from"/>
+            </span>
+          </div>
+        </div>
+        <div ng-if="message.type=='SE'">
+          <span>
+            <img ng-src="{{message.message}}" />
+          </span>
+        </div>
+        <div ng-if="message.type=='S'">
+          <span>{{message.message}}</span>
+        </div>
+        <div ng-if="message.type=='T' || message.type=='J'">
+          <span class="notice">{{message.message}}</span>
+        </div>
+        <div ng-if="message.type=='SVI'">
+          <span>
+            <img ng-src="{{rootImgPath}}/webcam.png" ng-if="message.active == 'true'"  />
+            <img ng-src="{{rootImgPath}}/webcam.png" ng-if="message.active =='false'" />
+          </span>
+        </div>
+        <div ng-if="message.type=='SV'">
+          <span>
+            <img ng-src="{{rootImgPath}}/video.png" popup-link="{{message.active}}" file-name="{{message.message}}" type="{{message.type}}" />
+          </span>
+        </div>
+        <div ng-if="message.type=='SVP'" id="progress_div{{message.inx}}">
+          <span>
+            <img ng-src="{{rootImgPath}}/video.png" />
+            <progress id="progress_bar{{message.inx}}" class="progressbar" value="0" max="100"></progress>
+          </span>
+        </div>
+        <div ng-if="message.type=='SFP'" id="progress_div{{message.inx}}">
+          <span style=''>
+            <progress id="progress_bar{{message.inx}}" class="progressbar_only" value="0" max="100"></progress>
+          </span>
+        </div>
+        <div ng-if="message.type=='RVI'">
+          <div class="small">{{message.name}}</div>
+          <div class="from">
+            <img ng-src="{{message.image}}" class="profile" />
+            <span>
+              <img ng-src="{{rootImgPath}}/webcam.png" ng-if="message.active == 'true'" ng-click="openWebRTC('{{message.message}}')" class="from"/>
+              <img ng-src="{{rootImgPath}}/webcam.png" ng-if="message.active =='false'" class="from"/>
+            </span>
+          </div>
+        </div>
+        <div ng-if="message.type=='RV'">
+          <div class="small">{{message.name}}</div>
+          <div class="from">
+            <img ng-src="{{message.image}}" class="profile" />
+            <span>
+              <img ng-src="{{rootImgPath}}/video.png" popup-link="{{message.active}}" file-name="{{message.message}}" type="{{message.type}}" class="from" />
+            </span>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </ion-content>
+  <ion-footer-bar class="bar-frosted" >
+    <input type="file" id="file" style="display:none"/>
+    <button ng-if=" toggles.showExt == true " class="button icon ion-close-round" ng-click="toggleExt(false)"></button>
+    <button ng-if=" toggles.showExt == false " class="button icon ion-plus-round" ng-click="toggleExt(true)"></button>
+    <button ng-if=" toggles.showEmo == true " class="button icon ion-sad" ng-click="toggleEmoticons(false)"></button>
+    <button ng-if=" toggles.showEmo == false " class="button icon ion-happy" ng-click="toggleEmoticons(true)"></button>
+
+    <input type="text" ng-model="inputMessage" placeholder="Start typing..." ng-enter="send();" style="margin:0 40px 0 10px;"/>
+    <button class="button button-positive" style="min-width:50px;" ng-click="send()" >Send </button>
+  </ion-footer-bar>
+  <div class="chat-extends slider-top closed" id="chat-extends" style="display:none">
+    <div class="row center">
+      <div class="col">
+        <img ng-src="{{rootImgPath}}/image.png" ng-click="openFileDialog('2')"/>
+      </div>
+      <div class="col" ng-if=" cameraFlag ">
+        <img ng-src="{{rootImgPath}}/camera.png" ng-click="openFileDialog('1')"/>
+      </div>
+      <div class="col" ng-if=" channelId.indexOf( '$' ) > -1 ">
+        <img ng-src="{{rootImgPath}}/webcam.png" ng-click="openWebRTC()"/>
+      </div>
+    </div>
+  </div>
+  <div class="chat-extends slider-top closed" id="chat-emoticons">
+    <div id="emoticon-tabs" class="tabs tab-emoticon" >
+      <a ng-class="emoticon.CN" id="tab{{$index}}" ng-repeat="emoticon in emoticons" ng-click="tabActive('{{$index}}');">
+        <i class="icon {{emoticon.tag}}"></i>
+      </a>
+    </div>
+    <div id="tabbody{{$index}}" style="display:none;" ng-repeat="emoticon in emoticons">
+      <div class="row" ng-repeat="items in emoticon.items">
+        <div class="col center" ng-repeat="image in items">
+          <img class="emoticon" ng-src="{{image}}" ng-click="sendEmoticon( '{{image}}' )" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-extends hidden" id="chat-notice">
+    <div class="item item-avatar" >
+      <img ng-src="{{notice.image}}"  />
+      <h2 class="mw90" id="notice-message">{{notice.message}}</h2>
+      <p>{{notice.name}}&nbsp;{{notice.date}}</p>
+      <i class="icon ion-more btn-more" ng-click="toggleNoticeMenu();"></i>
+      <!--
+      <i class="icon ion-ios7-location-outline btn-map" ng-click="toggleNoticeMap();"></i>
+      -->
+    </div>
+
+    <div class="chat-extends-buttons flex" >
+      <div class="col" ng-click="voteNotice(true)">
+        <i ng-class="{'icon ion-thumbsup on': notice.voteFlag == 'Y', 'icon ion-thumbsup' : notice.voteFlag != 'Y'}"></i>
+        <span>{{notice.Y_US.length}}</span>
+      </div>
+      <div class="col" ng-click="voteNotice(false)">
+        <i ng-class="{'icon ion-thumbsdown on': notice.voteFlag == 'N', 'icon ion-thumbsdown' : notice.voteFlag != 'N' }"></i>
+        <span>{{notice.N_US.length}}</span>
+      </div>
+    </div>
+    <!--
+    <div class="chat-extends-buttons hidden" id="chat-notice-map">
+      <div ng-bind-html="notice.location"></div>
+    </div>
+    -->
+    <div class="chat-extends-buttons hidden" id="chat-notice-menu">
+      <div class="col" ng-click="updateNotice('N','N')">
+        <span>No more</span>
+      </div>
+      <div class="col" ng-click="updateNotice('Y','Y')">
+        <span>Fold</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-extends " id="chat-map" style="border:1px solid #000; ">
+   
+  </div>
+
+
+  <button class="button ion-arrow-expand btn-expand hidden icon-large" id="chat-notice-button" ng-click="updateNotice('Y','N');"></button>
+  <img ng-src="{{loginUserImage}}" class="floating-image" />
+
+
+</ion-view>

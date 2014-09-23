@@ -1,0 +1,32 @@
+<div class="modal" ng-controller="FriendsModalCtrl">
+
+  <ion-header-bar class="bar bar-header bar-positive">
+    <button class="button button-icon ion-close no-drag" ng-click="modal.hide()"></button>
+    <h1 class="title">Select your friends({{modal.datas.length}})</h1>
+    <button class="button button-icon icon-right ion-checkmark" ng-click="inviteFriends()" ng-disabled='modal.selection.length == 0'>OK&nbsp;</button>
+  </ion-header-bar>
+
+  <ion-content> <!-- class="has-header" -->
+    <ion-list>
+      <div class="item item-input">
+          <i class="icon ion-search placeholder-icon"></i>
+          <input type="text" id="searchKey" placeholder="Search" search-by-key post="postFriends" reset="resetFriends" items="modal.datas">
+      </div>
+      <ion-item class="item item-checkbox" ng-repeat="data in modal.datas">
+        <label class="checkbox" >
+          <input type="checkbox" ng-click='toggleSelection("{{data.user_id}}")' ng-checked='modal.selection.indexOf("{{data.user_id}}") > -1 || modal.channelUsers.indexOf("{{data.user_id}}") > -1 ' ng-disabled='modal.channelUsers.indexOf("{{data.user_id}}") > -1'/>
+        </label>
+        <img class="img-friend" ng-src="{{data.image}}" />
+        <h2>{{data.user_name}}</h2>
+        <p>{{data.message}}</p>
+      </ion-item>
+    </ion-list>
+
+    <div class="card" ng-if="modal.datas.length == 0">
+      <div class="item item-text-wrap">
+        User is not existed.
+      </div>
+    </div>
+  </ion-content>
+
+</div>

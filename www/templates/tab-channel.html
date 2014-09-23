@@ -1,0 +1,37 @@
+<ion-view title="Channels">
+  <ion-nav-buttons side="right">
+    <button class="button" ng-click="logout()" ng-if=" !nodeWebkit ">
+      <i class="icon ion-log-out"></i>
+    </button>
+    <div class="close-button" ng-if=" nodeWebkit ">
+      <img id="close-button" ng-src="{{rootImgPath}}/button_close.png" ng-click="close()">
+    </div>    
+  </ion-nav-buttons>
+  <ion-content class="has-header" has-bouncing="true">
+    <ion-list>
+      <ion-item ng-repeat="channel in channelArray" ng-click='gotoChat("{{channel.channel_id}}")' class="item item-channel">
+        <img channel-image users="channel.channel_users" channel-name="channel.channel_name" image="channel.channel_image" ></img>
+        <div>
+          <h2 class="name" style="max-width:80%">{{channel.channel_name}}</h2>
+          <span channel-users users="channel.channel_users">
+          </span>
+        </div>
+        <p class="clear item-img" ng-if=" channel.latest_message == '@image@' ">
+          <img src="http://maps.google.com/mapfiles/kml/pal3/icon55.png" ></img>
+          <span>image</span>
+        </p>
+        <p class="clear item-img" ng-if=" channel.latest_message == '@video@' ">
+          <img src="http://www.vutelepresence.com/images/icon-camera.png" ></img>
+          <span>video</span>
+        </p>
+        <p class="clear item-img" ng-if=" channel.latest_message == '@emoticon@' ">
+          <img src="http://png.findicons.com/files/icons/1729/openworld/48/gaim_insert_smiley_small.png" ></img>
+          <span>emoticon</span>
+        </p>            
+        <p class="clear" ng-if=" channel.latest_message != '@image@' && channel.latest_message != '@video@' && channel.latest_message != '@emoticon@' ">{{channel.latest_message}}&nbsp;</p>
+        <span ng-if="channel.unread_count > 0" class="channel-message-unread">{{channel.unread_count}}</span>
+        <span updated-time timestamp="channel.channel_updated"></span>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
