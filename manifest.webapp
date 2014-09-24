@@ -1,11 +1,11 @@
 {
   "name": "Telegram",
-  "description": "UNOFFICIAL Telegram Web App.\nMore info & source code here: https://github.com/zhukov/webogram",
+  "description": "UNOFFICIAL messengerX Web App.\nMore info & source code here: https://github.com/zhukov/webogram",
   "version": "0.3.0",
   "type": "privileged",
   "launch_path": "/index.html",
   "developer": {
-    "name": "Igor Zhukov",
+    "name": "stalk software",
     "url": "https://github.com/zhukov"
   },
   "installs_allowed_from": [
@@ -28,8 +28,7 @@
     },
     "push": {
       "description": "Required for notifications"
-    },
-    "storage"
+    }
   },
   "activities": {
     "share": {

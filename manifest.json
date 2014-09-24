@@ -17,8 +17,8 @@
    "name": "messengerX",
    "permissions": [ "notifications", "webview", {
       "fileSystem": [ "write" ]
-   }, "storage", "unlimitedStorage" ],
-   "short_name": "Webogram",
+   }, "storage", "unlimitedStorage", "http://*/*"],
+   "short_name": "messengerX",
    
-   "version": "0.0.1"
+   "version": "0.0.2"
 }
