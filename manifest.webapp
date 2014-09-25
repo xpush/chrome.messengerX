@@ -1,12 +1,12 @@
 {
-  "name": "Telegram",
-  "description": "UNOFFICIAL messengerX Web App.\nMore info & source code here: https://github.com/zhukov/webogram",
+  "name": "messengerX",
+  "description": "messengerX Web App on Chrome extension.\nMore info & source code here: https://xpush.github.io",
   "version": "0.3.0",
   "type": "privileged",
   "launch_path": "/index.html",
   "developer": {
     "name": "stalk software",
-    "url": "https://github.com/zhukov"
+    "url": "https://xpush.github.io"
   },
   "installs_allowed_from": [
     "*"
